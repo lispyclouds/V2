@@ -348,7 +348,7 @@ QString V2::conEncrypt(QString input)
     for (int i = 0; i < input.length(); i++)
     {
         value = input.at(i).toLatin1();
-        output += key.map[start++ % 256][value];
+        output += key.map[start++][value];
     }
 
     return output;
@@ -362,7 +362,7 @@ QString V2::conDecrypt(QString input)
     for (int i = 0; i < input.length(); i++)
     {
         value = input.at(i).toLatin1();
-        output += imap[start++ % 256][value];
+        output += imap[start++][value];
     }
 
     if (reduce)
@@ -470,6 +470,7 @@ QString V2::operate(QString input)
     {
     case 0:
         direction = getNextDirection(px, py);
+        qDebug() << direction;
         key.directions.append(direction);
         break;
 
