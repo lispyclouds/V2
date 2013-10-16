@@ -456,7 +456,8 @@ void V2::getNextGenMatrix()
 QString V2::operate(QString input)
 {
     QString output = "";
-    quint8 value, px = key.x, py = key.y, direction, what, where = 0;
+    quint8 value, px = key.x, py = key.y, direction, what;
+    int where = 0;
 
     if (mode == "encrypt")
     {
@@ -479,10 +480,14 @@ QString V2::operate(QString input)
         break;
     }
 
+    qDebug() << input;
+
     for (int i = 0; i < input.length(); i++)
     {
         value = input.at(i).toLatin1();
+        qDebug() << value;
         output += value ^ key.map[px][py];
+        qDebug() << (value ^ key.map[px][py]);
 
         switch (direction)
         {
@@ -531,6 +536,7 @@ QString V2::operate(QString input)
             {
             case 0:
                 direction = getNextDirection(px, py);
+                qDebug() << direction;
                 key.directions.append(direction);
                 break;
 
