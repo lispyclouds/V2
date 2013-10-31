@@ -482,9 +482,9 @@ QString V2::operate(QString input)
 
     qDebug() << input;
 
-    for (int i = 0; i < input.length(); i++)
+    for (int j = 0; j < input.length(); j++)
     {
-        value = input.at(i).toLatin1();
+        value = input.at(j).toLatin1();
         qDebug() << value;
         output += value ^ key.map[px][py];
         qDebug() << (value ^ key.map[px][py]);
