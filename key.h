@@ -1,6 +1,8 @@
 #ifndef KEY_H
 #define KEY_H
 
+//part of V2
+
 #include <QString>
 #include <QList>
 
