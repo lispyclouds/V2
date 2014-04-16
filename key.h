@@ -1,7 +1,7 @@
 #ifndef KEY_H
 #define KEY_H
 
-//part of V2
+//part of V2 Cipher
 
 #include <QString>
 #include <QList>
