@@ -20,7 +20,7 @@ void MainWindow::on_lineEdit_returnPressed()
 {
     if (ui->lineEdit_2->text() == "" || !handler.loadKeyFromFile(ui->lineEdit_2->text()))
     {
-        QMessageBox::information(this, "Error", "Please provide a valid key file or generate a new one");
+        QMessageBox::information(this, "Error!", "Please provide a valid key file or generate a new one");
         return;
     }
 
