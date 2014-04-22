@@ -38,7 +38,7 @@ void MainWindow::on_lineEdit_returnPressed()
 void MainWindow::on_pushButton_clicked()
 {
     QString path = QFileDialog::getOpenFileName(this,
-                                                "Select a key file",
+                                                "Please select a key file",
                                                 QDir::homePath(),
                                                 "V2 Key Files (*.v2key);;All Files (*.*)");
 
