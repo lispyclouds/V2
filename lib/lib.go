@@ -5,9 +5,8 @@ import (
 	"time"
 )
 
-func FindRandomNumber(upperLimit int, lowerLimit int) int {
+func findRandomNumber(upperLimit int, lowerLimit int) int {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-
 	return r.Intn(upperLimit - lowerLimit) + lowerLimit
 }
 
@@ -18,20 +17,19 @@ func swap(string1 uint8, string2 uint8) (uint8, uint8) {
 func Shuffle(column [256] uint8) [256]uint8 {
 	var size int = len(column)
 	for counter := range column {
-		var randomLocation int = FindRandomNumber(size, 0)
+		var randomLocation int = findRandomNumber(size, 0)
 		column[counter], column[randomLocation] = swap(column[counter], column[randomLocation])
-
 	}
 
 	return column
 }
 
 func ChooseRandomPoint(upperLimit int, lowerLimit int) (int, int) {
-	return FindRandomNumber(upperLimit, lowerLimit), FindRandomNumber(upperLimit, lowerLimit)
+	return findRandomNumber(upperLimit, lowerLimit), findRandomNumber(upperLimit, lowerLimit)
 }
 
 func ChooseRandomDirection(possibleDirections []int) int {
-	return possibleDirections[FindRandomNumber(len(possibleDirections), 0)]
+	return possibleDirections[findRandomNumber(len(possibleDirections), 0)]
 }
 
 func MoveTowards(direction int, px int, py int) (int, int) {
@@ -73,4 +71,25 @@ func MoveTowards(direction int, px int, py int) (int, int) {
 		break;
 	}
 	return px, py
+}
+
+func ByteToString(dataInByte []byte) string {
+	return string(dataInByte)
+}
+
+func StringToByte(data string) []byte {
+	return []byte(data)
+}
+
+func GenarateInitialKeyMatrix() [256][256]uint8 {
+	keyMatrix := [256][256]uint8{}
+	var row, column int
+
+	for row = 0; row <= 255; row++ {
+		for column = 0; column <= 255; column++ {
+			keyMatrix[column][row] = uint8(column)
+		}
+	}
+
+	return keyMatrix
 }
