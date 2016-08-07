@@ -52,13 +52,13 @@ func getPossibleDirection(directions [] int, px int, py int) [] int {
 		possibleDirection = []int{0, 1, 2}
 	} else if px == 255 && py == 0 {
 		possibleDirection = []int{4, 5, 6}
-	} else if py == 0 {
+	} else if py == 0 && px != 255 {
 		possibleDirection = []int{2, 3, 4, 5, 6}
-	} else if py == 255 {
+	} else if py == 255 && px != 0 {
 		possibleDirection = []int{0, 1, 2, 6, 7}
-	} else if px == 255 {
-		possibleDirection = []int{3, 4, 5, 6, 7}
-	} else if px == 0 {
+	} else if px == 255 && py != 0 {
+		possibleDirection = []int{4, 5, 6, 7}
+	} else if px == 0 && py != 255 {
 		possibleDirection = []int{0, 1, 2, 3, 4}
 	} else {
 		possibleDirection = directions
