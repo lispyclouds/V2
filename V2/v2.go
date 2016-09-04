@@ -4,15 +4,15 @@ import (
 	"../lib"
 )
 
-type point struct {
-	x int
-	y int
+type Point struct {
+	X int
+	Y int
 }
 
 type EncryptedCredential struct {
-	key [256][256] uint8
-	startingPosition point
-	moves []int
+	Key              [256][256] uint8
+	StartingPosition Point
+	Moves            []int
 }
 
 func shuffle(data [256][256] uint8) [256][256] uint8 {
@@ -94,16 +94,16 @@ func Encrypt(dataStream []byte) (EncryptedCredential, []byte) {
 		}
 
 	}
-	return EncryptedCredential{key:initialCipherKey,startingPosition:point{x:startingPX,y:startingPY}, moves:moves}, cipherDataStream
+	return EncryptedCredential{Key:initialCipherKey, StartingPosition:Point{X:startingPX, Y:startingPY}, Moves:moves}, cipherDataStream
 }
 
 func Decrypt(credential EncryptedCredential, cipherDataStream []byte) []byte {
 	data := make([]byte, 0)
 	counter :=0
-	px,py := credential.startingPosition.x, credential.startingPosition.y
+	px,py := credential.StartingPosition.X, credential.StartingPosition.Y
 	dataLength := len(cipherDataStream)
-	cipherKey := credential.key
-	moves := credential.moves
+	cipherKey := credential.Key
+	moves := credential.Moves
 	direction := moves[counter]
 	for recentIndex := 0; recentIndex < dataLength; recentIndex++ {
 		data = append(data, cipherDataStream[recentIndex] ^ cipherKey[px][py])
