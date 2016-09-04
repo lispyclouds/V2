@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	isEncrypt := flag.Bool("encrypt", false, "To encrypt data");
+	isEncrypt := flag.Bool("encrypt", true, "To encrypt data");
 	isDecrypt := flag.Bool("decrypt", false, "To decrypt data");
 	var sourceFileName, credentialFileName, destinationDirectoryPath string
 	flag.StringVar(&sourceFileName, "f", "", "Pass the source file name");
