@@ -102,8 +102,15 @@ func CheckError(err error) {
 }
 
 func CreatePath(folderPath string, fileName string) string {
+	if (folderPath != "") {
+		paths := strings.Split(fileName, "/")
+		fileName = paths[len(paths) - 1];
+	}
 	if (strings.HasSuffix(folderPath, "/")) {
 		return folderPath + fileName;
+	}
+	if(folderPath == ""){
+		return fileName;
 	}
 	return folderPath + "/" + fileName;
 }
