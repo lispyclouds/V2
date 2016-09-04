@@ -3,6 +3,7 @@ package lib
 import (
 	"math/rand"
 	"time"
+	"strings"
 )
 
 func findRandomNumber(upperLimit int, lowerLimit int) int {
@@ -92,4 +93,17 @@ func GenarateInitialKeyMatrix() [256][256]uint8 {
 	}
 
 	return keyMatrix
+}
+
+func CheckError(err error) {
+	if (err != nil) {
+		panic(err)
+	}
+}
+
+func CreatePath(folderPath string, fileName string) string {
+	if (strings.HasSuffix(folderPath, "/")) {
+		return folderPath + fileName;
+	}
+	return folderPath + "/" + fileName;
 }

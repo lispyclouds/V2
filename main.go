@@ -1,37 +1,33 @@
 package main
 
-import "fmt"
 import (
 	"./V2"
 	"./lib"
+	"io/ioutil"
+	"flag"
 )
 
-func genMatrix() [256][256]uint8 {
-	mat := [256][256]uint8{}
-	var i, j uint16
-
-	for i = 0; i <= 255; i++ {
-		for j = 0; j <= 255; j++ {
-			mat[j][i] = uint8(j)
-		}
-	}
-
-	return mat
-}
-
 func main() {
-	data := genMatrix()
-	for columnCounter := 0; columnCounter < len(data); columnCounter++ {
-		column := [256] uint8{}
-		for rowCounter := 0; rowCounter < 256; rowCounter++ {
-			column[rowCounter] = data[rowCounter][columnCounter]
-		}
-		data[columnCounter] = lib.Shuffle(column)
+	isEncrypt := flag.Bool("encrypt", false, "To encrypt data");
+	isDecrypt := flag.Bool("decrypt", false, "To decrypt data");
+	var sourceFileName, credentialFileName, destinationDirectoryPath string
+	flag.StringVar(&sourceFileName, "f", "", "Pass the source file name");
+	flag.StringVar(&credentialFileName, "c", "", "Pass the credential file name");
+	flag.StringVar(&destinationDirectoryPath, "d", "", "Pass the destination folder path");
+	flag.Parse();
+	if *isEncrypt {
+		dataStream, err := ioutil.ReadFile(sourceFileName);
+		lib.CheckError(err);
+		credential, cipherDataStream := V2.Encrypt(dataStream);
+		err = ioutil.WriteFile(lib.CreatePath(destinationDirectoryPath, sourceFileName + ".credential"), credential, 0744)
+		err = ioutil.WriteFile(lib.CreatePath(destinationDirectoryPath, sourceFileName + ".encrypt"), cipherDataStream, 0744)
+		lib.CheckError(err);
 	}
-	V2.Encrypt(data)
-
-	fmt.Println(data)
+	if *isDecrypt {
+		credentialAsByte, err := ioutil.ReadFile(credentialFileName);
+		cipherDataStream, err := ioutil.ReadFile(sourceFileName);
+		lib.CheckError(err);
+		dataAsByte := V2.Decrypt(credentialAsByte, cipherDataStream);
+		ioutil.WriteFile(lib.CreatePath(destinationDirectoryPath, sourceFileName + ".decrypt"), dataAsByte, 0744);
+	}
 }
-
-
-
