@@ -2,6 +2,7 @@ package V2
 
 import (
 	"../lib"
+	"encoding/json"
 )
 
 type Point struct {
@@ -66,7 +67,7 @@ func getPossibleDirection(directions [] int, px int, py int) [] int {
 	return possibleDirection
 }
 
-func Encrypt(dataStream []byte) (EncryptedCredential, []byte) {
+func Encrypt(dataStream []byte) ([]byte, []byte) {
 	key := lib.GenarateInitialKeyMatrix()
 	cipherDataStream := make([]byte, 0)
 	var dataLength int = len(dataStream)
@@ -94,10 +95,14 @@ func Encrypt(dataStream []byte) (EncryptedCredential, []byte) {
 		}
 
 	}
-	return EncryptedCredential{Key:initialCipherKey, StartingPosition:Point{X:startingPX, Y:startingPY}, Moves:moves}, cipherDataStream
+	credential, _ := json.Marshal(EncryptedCredential{Key:initialCipherKey, StartingPosition:Point{X:startingPX, Y:startingPY}, Moves:moves});
+	return credential, cipherDataStream
 }
 
-func Decrypt(credential EncryptedCredential, cipherDataStream []byte) []byte {
+func Decrypt(credentialAsByte []byte, cipherDataStream []byte) []byte {
+	var credential EncryptedCredential;
+	err := json.Unmarshal(credentialAsByte, &credential)
+	lib.CheckError(err)
 	data := make([]byte, 0)
 	counter :=0
 	px,py := credential.StartingPosition.X, credential.StartingPosition.Y
