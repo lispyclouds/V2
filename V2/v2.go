@@ -11,14 +11,14 @@ type Point struct {
 }
 
 type EncryptedCredential struct {
-	Key              [256][256] uint8
+	Key              [256][256]uint8
 	StartingPosition Point
 	Moves            []int
 }
 
-func shuffle(data [256][256] uint8) [256][256] uint8 {
+func shuffle(data [256][256]uint8) [256][256]uint8 {
 	for columnCounter := 0; columnCounter < len(data); columnCounter++ {
-		column := [256] uint8{}
+		column := [256]uint8{}
 		for rowCounter := 0; rowCounter < 256; rowCounter++ {
 			column[rowCounter] = data[rowCounter][columnCounter]
 		}
@@ -27,7 +27,7 @@ func shuffle(data [256][256] uint8) [256][256] uint8 {
 	return data
 }
 
-func sBoxOfEachCell(data [256][256] uint8) [256][256] uint8 {
+func sBoxOfEachCell(data [256][256]uint8) [256][256]uint8 {
 	for row := 0; row < 256; row++ {
 		for column := 0; column < 256; column++ {
 			data[row][column] = lib.SBoxOf(data[row][column])
@@ -36,14 +36,14 @@ func sBoxOfEachCell(data [256][256] uint8) [256][256] uint8 {
 	return data
 }
 
-func reachToAside(px int, py int) (bool) {
+func reachToAside(px int, py int) bool {
 	if px == 255 || py == 255 || px == 0 || py == 0 {
 		return true
 	}
 	return false
 }
 
-func getPossibleDirection(directions [] int, px int, py int) [] int {
+func getPossibleDirection(directions []int, px int, py int) []int {
 	possibleDirection := []int{}
 	if px == 0 && py == 0 {
 		possibleDirection = []int{2, 3, 4}
@@ -71,7 +71,7 @@ func Encrypt(dataStream []byte) ([]byte, []byte) {
 	key := lib.GenarateInitialKeyMatrix()
 	cipherDataStream := make([]byte, 0)
 	var dataLength int = len(dataStream)
-	allDirections := [] int{0, 1, 2, 3, 4, 5, 6, 7}
+	allDirections := []int{0, 1, 2, 3, 4, 5, 6, 7}
 	moves := make([]int, 0)
 
 	initialCipherKey := shuffle(key)
@@ -83,8 +83,8 @@ func Encrypt(dataStream []byte) ([]byte, []byte) {
 	px, py, direction := startingPX, startingPY, startingDirection
 
 	for recentIndex := 0; recentIndex < dataLength; recentIndex++ {
-		cipherDataStream = append(cipherDataStream, dataStream[recentIndex] ^ cipherKey[px][py])
-		if (!reachToAside(px, py)) {
+		cipherDataStream = append(cipherDataStream, dataStream[recentIndex]^cipherKey[px][py])
+		if !reachToAside(px, py) {
 			px, py = lib.MoveTowards(direction, px, py)
 
 		} else {
@@ -95,24 +95,24 @@ func Encrypt(dataStream []byte) ([]byte, []byte) {
 		}
 
 	}
-	credential, _ := json.Marshal(EncryptedCredential{Key:initialCipherKey, StartingPosition:Point{X:startingPX, Y:startingPY}, Moves:moves});
+	credential, _ := json.Marshal(EncryptedCredential{Key: initialCipherKey, StartingPosition: Point{X: startingPX, Y: startingPY}, Moves: moves})
 	return credential, cipherDataStream
 }
 
 func Decrypt(credentialAsByte []byte, cipherDataStream []byte) []byte {
-	var credential EncryptedCredential;
+	var credential EncryptedCredential
 	err := json.Unmarshal(credentialAsByte, &credential)
 	lib.CheckError(err)
 	data := make([]byte, 0)
-	counter :=0
-	px,py := credential.StartingPosition.X, credential.StartingPosition.Y
+	counter := 0
+	px, py := credential.StartingPosition.X, credential.StartingPosition.Y
 	dataLength := len(cipherDataStream)
 	cipherKey := credential.Key
 	moves := credential.Moves
 	direction := moves[counter]
 	for recentIndex := 0; recentIndex < dataLength; recentIndex++ {
-		data = append(data, cipherDataStream[recentIndex] ^ cipherKey[px][py])
-		if (!reachToAside(px, py)) {
+		data = append(data, cipherDataStream[recentIndex]^cipherKey[px][py])
+		if !reachToAside(px, py) {
 			px, py = lib.MoveTowards(direction, px, py)
 
 		} else {

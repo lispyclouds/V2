@@ -85,11 +85,10 @@ func SBoxOf(value uint8) uint8 {
 	x = s
 
 	for c = 0; c < 4; c++ {
-		s = (s << 1) | (s >> 7);
-		x ^= s;
+		s = (s << 1) | (s >> 7)
+		x ^= s
 	}
 
-	x ^= 99;
-	return x;
+	x ^= 99
+	return x
 }
-
