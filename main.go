@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	isEncrypt := flag.Bool("encrypt", true, "To encrypt data")
+	isEncrypt := flag.Bool("encrypt", false, "To encrypt data")
 	isDecrypt := flag.Bool("decrypt", false, "To decrypt data")
 	var sourceFileName, credentialFileName, destinationDirectoryPath string
 	flag.StringVar(&sourceFileName, "f", "", "Pass the source file name")
@@ -24,6 +24,7 @@ func main() {
 			err := errors.New("Please provide source file name to decrypt the data")
 			panic(err)
 		}
+
 		dataStream, err := ioutil.ReadFile(sourceFileName)
 		lib.CheckError(err)
 		credential, cipherDataStream := V2.Encrypt(dataStream)
@@ -45,13 +46,14 @@ func main() {
 			err := errors.New("Please provide source file name to decrypt the data")
 			panic(err)
 		}
+
 		credentialAsByte, err := ioutil.ReadFile(credentialFileName)
 		lib.CheckError(err)
 		cipherDataStream, err := ioutil.ReadFile(sourceFileName)
 		lib.CheckError(err)
 		dataAsByte := V2.Decrypt(credentialAsByte, cipherDataStream)
 		sourceFileName = lib.CreatePath(destinationDirectoryPath, sourceFileName)
-		decryptedFilePath := strings.Split(sourceFileName, ".encrypt")[0] + ".decrypted"
+		decryptedFilePath := strings.Split(sourceFileName, ".encrypted")[0] + ".decrypted"
 		err = ioutil.WriteFile(decryptedFilePath, dataAsByte, 0744)
 		lib.CheckError(err)
 		fmt.Println("Decryption successfully completed.\nThe decrypted file path is " + decryptedFilePath)

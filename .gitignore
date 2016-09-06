@@ -3,3 +3,4 @@
 main
 *.credential
 *.encrypted
+*.decrypted
