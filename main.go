@@ -28,7 +28,7 @@ func main() {
 		lib.CheckError(err)
 		credential, cipherDataStream := V2.Encrypt(dataStream)
 		credentialFilePath := lib.CreatePath(destinationDirectoryPath, sourceFileName+".credential")
-		cipherDataPath := lib.CreatePath(destinationDirectoryPath, sourceFileName+".encrypt")
+		cipherDataPath := lib.CreatePath(destinationDirectoryPath, sourceFileName+".encrypted")
 		err = ioutil.WriteFile(credentialFilePath, credential, 0744)
 		err = ioutil.WriteFile(cipherDataPath, cipherDataStream, 0744)
 		lib.CheckError(err)
@@ -51,7 +51,7 @@ func main() {
 		lib.CheckError(err)
 		dataAsByte := V2.Decrypt(credentialAsByte, cipherDataStream)
 		sourceFileName = lib.CreatePath(destinationDirectoryPath, sourceFileName)
-		decryptedFilePath := strings.Split(sourceFileName, ".encrypt")[0] + ".decrypt"
+		decryptedFilePath := strings.Split(sourceFileName, ".encrypt")[0] + ".decrypted"
 		err = ioutil.WriteFile(decryptedFilePath, dataAsByte, 0744)
 		lib.CheckError(err)
 		fmt.Println("Decryption successfully completed.\nThe decrypted file path is " + decryptedFilePath)
