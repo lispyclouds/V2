@@ -1,13 +1,14 @@
 package main
 
 import (
-	"./V2"
-	"./lib"
 	"errors"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"strings"
+
+	"./V2"
+	"./lib"
 )
 
 func main() {
@@ -30,8 +31,8 @@ func main() {
 		credential, cipherDataStream := V2.Encrypt(dataStream)
 		credentialFilePath := lib.CreatePath(destinationDirectoryPath, sourceFileName+".credential")
 		cipherDataPath := lib.CreatePath(destinationDirectoryPath, sourceFileName+".encrypted")
-		err = ioutil.WriteFile(credentialFilePath, credential, 0744)
-		err = ioutil.WriteFile(cipherDataPath, cipherDataStream, 0744)
+		err = ioutil.WriteFile(credentialFilePath, credential, 0644)
+		err = ioutil.WriteFile(cipherDataPath, cipherDataStream, 0644)
 		lib.CheckError(err)
 		fmt.Println("Encryption successfully completed.\nThe encryted data and credential file paths are following " + cipherDataPath + ", " + credentialFilePath)
 		return
@@ -54,7 +55,7 @@ func main() {
 		dataAsByte := V2.Decrypt(credentialAsByte, cipherDataStream)
 		sourceFileName = lib.CreatePath(destinationDirectoryPath, sourceFileName)
 		decryptedFilePath := strings.Split(sourceFileName, ".encrypted")[0] + ".decrypted"
-		err = ioutil.WriteFile(decryptedFilePath, dataAsByte, 0744)
+		err = ioutil.WriteFile(decryptedFilePath, dataAsByte, 0644)
 		lib.CheckError(err)
 		fmt.Println("Decryption successfully completed.\nThe decrypted file path is " + decryptedFilePath)
 	}
