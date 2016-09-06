@@ -37,14 +37,12 @@ func sBoxOfEachCell(data [256][256]uint8) [256][256]uint8 {
 }
 
 func reachToAside(px int, py int) bool {
-	if px == 255 || py == 255 || px == 0 || py == 0 {
-		return true
-	}
-	return false
+	return px == 255 || py == 255 || px == 0 || py == 0
 }
 
 func getPossibleDirection(directions []int, px int, py int) []int {
 	possibleDirection := []int{}
+
 	if px == 0 && py == 0 {
 		possibleDirection = []int{2, 3, 4}
 	} else if py == 255 && px == 255 {
@@ -64,6 +62,7 @@ func getPossibleDirection(directions []int, px int, py int) []int {
 	} else {
 		possibleDirection = directions
 	}
+
 	return possibleDirection
 }
 
@@ -95,6 +94,7 @@ func Encrypt(dataStream []byte) ([]byte, []byte) {
 		}
 
 	}
+
 	credential, _ := json.Marshal(EncryptedCredential{Key: initialCipherKey, StartingPosition: Point{X: startingPX, Y: startingPY}, Moves: moves})
 	return credential, cipherDataStream
 }
@@ -110,6 +110,7 @@ func Decrypt(credentialAsByte []byte, cipherDataStream []byte) []byte {
 	cipherKey := credential.Key
 	moves := credential.Moves
 	direction := moves[counter]
+
 	for recentIndex := 0; recentIndex < dataLength; recentIndex++ {
 		data = append(data, cipherDataStream[recentIndex]^cipherKey[px][py])
 		if !reachToAside(px, py) {
@@ -123,5 +124,6 @@ func Decrypt(credentialAsByte []byte, cipherDataStream []byte) []byte {
 		}
 
 	}
+
 	return data
 }

@@ -17,6 +17,7 @@ func swap(string1 uint8, string2 uint8) (uint8, uint8) {
 
 func Shuffle(column [256]uint8) [256]uint8 {
 	var size int = len(column)
+
 	for counter := range column {
 		var randomLocation int = findRandomNumber(size, 0)
 		column[counter], column[randomLocation] = swap(column[counter], column[randomLocation])
@@ -112,5 +113,6 @@ func CreatePath(folderPath string, fileName string) string {
 	if folderPath == "" {
 		return fileName
 	}
+
 	return folderPath + "/" + fileName
 }
